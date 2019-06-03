@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">FirstApp</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="tv1">Student Sign-Up</string>
+    <string name="tv3">Sex/Gender</string>
+    <string name="tv4">SOIT Degree</string>
+    <string name="tv5">Year Level</string>
+    <string name="tv6">Birth Date</string>
+    <string name="tv7">Hobbies</string>
+    <string name="tv8">User Information</string>
+    <string name="tv9">Name</string>
+    <string name="tv10">E-mail</string>
+    <string name="tv11">Password</string>
+
+
+    <string name="et1">Name</string>
+    <string name="et2">E-mail</string>
+    <string name="et3">Password</string>
+    <string name="et4">Confirm Password</string>
+    <string name="rb1">Male</string>
+    <string name="rb2">Female</string>
+    <string name="b1">Next</string>
+    <string name="b2">Back</string>
+
+    <string name="cb1">Football</string>
+    <string name="cb2">Swimming</string>
+    <string name="cb3">Sleeping</string>
+    <string name="cb4">Gaming</string>
+    <string name="cb5">Music</string>
+    <string name="cb6">Hiking</string>
+    
+    <string-array name="sp1list">
+        <item>Computer Science</item>
+        <item>Information Systems</item>
+        <item>Information Technology</item>
+    </string-array>
+
+    <string-array name="sp2list">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+</resources>
