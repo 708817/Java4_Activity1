@@ -202,54 +202,5 @@ public class Main2Activity extends AppCompatActivity {
         });
         // BACK BUTTON END
 
-        /*
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final TextView tv1 = (TextView) findViewById(R.id.tv1);
-                final EditText et1 = (EditText) findViewById(R.id.et1);
-
-                tv1.setText(b.getString("input1"));
-
-                try {
-
-                    tv2.setText("");
-
-                    int shaded = rgSexGender.getCheckedRadioButtonId();
-                    RadioButton rbSexGender = (RadioButton) findViewById(shaded);
-                    boolean trial1 = false, trial2 = false, trial3 = false;
-                    String name = "", email = "", pass = "", cpass = "", sexgender = "";
-                    String checkemail;
-
-                    name = et1.getText().toString();
-                    email = et2.getText().toString();
-                    pass = et3.getText().toString();
-                    cpass = et4.getText().toString();
-                    sexgender = rbSexGender.getText().toString();
-
-                    if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || cpass.isEmpty()) {
-                        tv2.setText("Fill all required fields!");
-                    } else {
-                        trial1 = true;
-                    }
-
-                    if (trial1 && trial2 && trial3) {
-                        Bundle b = new Bundle();
-                        b.putString("inputName", name);
-                        b.putString("inputEmail", email);
-                        b.putString("inputPassword", pass);
-                        b.putString("inputSexGender", sexgender);
-
-                        Intent i = new Intent(Main2Activity.this, Main3Activity.class);
-                        i.putExtras(b);
-
-                        startActivity(i);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
 }
