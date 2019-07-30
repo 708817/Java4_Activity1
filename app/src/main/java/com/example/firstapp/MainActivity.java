@@ -1,17 +1,23 @@
 package com.example.firstapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    DBController dbController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
-
                     tv2.setText("");
 
                     int shaded = rgSexGender.getCheckedRadioButtonId();
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if (!confirmPassword(pass, cpass)) {
                         tv2.setText("Passwords do not match!");
+                        et3.setText("");
+                        et4.setText("");
                     } else {
                         trial2 = true;
                     }
@@ -69,16 +76,29 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (trial1 && trial2 && trial3) {
+                        Intent i = new Intent(MainActivity.this, Main2Activity.class);
                         Bundle b = new Bundle();
+
+                        View imageView = (ImageView) findViewById(R.id.imageView);
+                        View tv1 = (TextView) findViewById(R.id.tv1);
+
                         b.putString("inputName", name);
                         b.putString("inputEmail", email);
                         b.putString("inputPassword", pass);
                         b.putString("inputSexGender", sexgender);
 
-                        Intent i = new Intent(MainActivity.this, Main2Activity.class);
+                        String transitionName = getString(R.string.transition_string);
+                        String transitionName2 = getString(R.string.transition_string2);
+                        // TRANSITION TEST START
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                                Pair.create(imageView, transitionName),
+                                Pair.create(tv1, transitionName2));
+                        // TRANSITION TEST END
+
                         i.putExtras(b);
 
-                        startActivity(i);
+//                        startActivity(i);
+                        startActivity(i, options.toBundle());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -97,19 +117,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String checkEmail(String email) {
+
+        dbController = new DBController(this, "", null, 1);
         String error1 = "Invalid E-mail!",
-                error2 = "E-mail does not exist!";
+                error2 = "E-mail already exists!";
 
         if(email.indexOf('@') < 0) {
             return error1;
         }
 
-        String[] dotCheck = email.split("@");
-        if(dotCheck[1].indexOf('.') < 0) {
+        String[] contentCheck1 = email.split("@");
+        if(contentCheck1[0].length() < 1 || contentCheck1[1].indexOf('.') < 0) {
+            return error1;
+        }
+
+        String[] contentCheck2 = contentCheck1[1].split("\\.");
+        if(contentCheck2.length < 2) {
+            return error1;
+        }
+        if(contentCheck2[0].length() < 1 || contentCheck2[1].length() < 1) {
             return error1;
         }
 
         //SQLite e-mail check
+        if(!dbController.checkEmail(email)) {
+            return error2;
+        }
 
         return "success";
     }

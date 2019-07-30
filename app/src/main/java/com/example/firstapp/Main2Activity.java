@@ -1,5 +1,6 @@
 package com.example.firstapp;
 
+import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,13 +13,16 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,11 +30,22 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class Main2Activity extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private DBController dbController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +55,9 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void runist() {
+
+        // CREATE DB CONTROLLER
+        dbController = new DBController(this, "", null, 1);
 
         // GET BUNDLE VARIABLES START
         Intent prevIn = getIntent();
@@ -167,20 +185,28 @@ public class Main2Activity extends AppCompatActivity {
                     }
 
                     if (trial1) {
-                        Bundle b = new Bundle();
-                        b.putString("name", name);
-                        b.putString("email", email);
-                        b.putString("pass", pass);
-                        b.putString("sexgender", sexgender);
-                        b.putString("degree", degree);
-                        b.putString("level", level);
-                        b.putString("birth", birth);
-                        b.putString("hobbies", hobbies);
 
                         Intent i = new Intent(Main2Activity.this, Main3Activity.class);
+                        dbController.dbInsert(name, email, birth, sexgender, degree, level, hobbies, pass);
+                        saveCSV(name, email, birth, sexgender, degree, level, hobbies, pass);
+
+                        View imageView = (ImageView) findViewById(R.id.imageView);
+                        View tv1 = (TextView) findViewById(R.id.tv1);
+
+                        Bundle b = new Bundle();
+                        b.putString("email", email);
+
+                        String transitionName = getString(R.string.transition_string);
+                        String transitionName2 = getString(R.string.transition_string2);
+
+                        // TRANSITION TEST START
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Main2Activity.this,
+                                Pair.create(imageView, transitionName));
+                        // TRANSITION TEST END
+
                         i.putExtras(b);
 
-                        startActivity(i);
+                        startActivity(i, options.toBundle());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -202,5 +228,77 @@ public class Main2Activity extends AppCompatActivity {
         });
         // BACK BUTTON END
 
+    }
+
+    public void saveCSV(String name, String email, String birth, String gender,
+                        String degree, String level, String hobbies, String pass) {
+
+        String[] hobbiesHolder = hobbies.split(", ");
+        String newHobbies = "";
+        int tally = 0;
+        for (String x : hobbiesHolder) {
+            tally++;
+            System.out.println("Length: " + hobbiesHolder.length);
+            if (tally < hobbiesHolder.length) {
+                System.out.println(tally);
+                newHobbies += x + ".";
+            }
+            else
+                newHobbies += x;
+        }
+
+        ArrayList<String> alInfo = new ArrayList<String>();
+        alInfo.add(name);
+        alInfo.add(email);
+        alInfo.add(birth);
+        alInfo.add(gender);
+        alInfo.add(degree);
+        alInfo.add(level);
+        alInfo.add(newHobbies);
+        alInfo.add(pass);
+
+        String input = "";
+        for (String y : alInfo) {
+            input += y + ", ";
+        }
+
+        String fullPath = Environment.getExternalStorageDirectory().toString() + "/A2_Torralba";
+        System.out.println(fullPath);
+        try
+        {
+            File dir = new File(fullPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            File file = new File(fullPath, "student.csv");
+            if (!file.exists()) {
+                file.createNewFile();
+
+                FileWriter fwNew = new FileWriter(file, true);
+                BufferedWriter bwNew = new BufferedWriter(fwNew);
+
+                bwNew.write("NAME, E-MAIL, BIRTH, GENDER, DEGREE, LEVEL, HOBBIES, PASS");
+                bwNew.flush();
+                fwNew.flush();
+                bwNew.close();
+                fwNew.close();
+            }
+
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.newLine();
+            bw.write(input);
+
+            bw.flush();
+            fw.flush();
+            bw.close();
+            fw.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

@@ -42,4 +42,8 @@
         <item>4</item>
     </string-array>
 
+
+    <string name="transition_string">test</string>
+    <string name="transition_string2">test2</string>
+
 </resources>

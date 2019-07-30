@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowContentTransitions">true</item>
+
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,6 +23,10 @@
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Button.Mapua" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
 </resources>
